@@ -13,6 +13,8 @@ class RewardBadgeOverlay extends StatelessWidget {
   final Offset targetOffset;
   final int balanceAfter;
   final SimulatorRewardAnimationConfigs configs;
+  final bool isMissClaim;
+  
 
   const RewardBadgeOverlay({
     required this.controller,
@@ -20,6 +22,7 @@ class RewardBadgeOverlay extends StatelessWidget {
     required this.targetOffset,
     required this.configs,
     required this.balanceAfter,
+    this.isMissClaim = false,
     super.key,
   });
 
@@ -34,13 +37,17 @@ class RewardBadgeOverlay extends StatelessWidget {
           builder: (context, child) {
             final progress = controller.value * 3200.0;
             final int startPoints = balanceAfter - awardedPoints;
-            final int displayedPoints = progress >= 2220
+            final int displayedPoints = isMissClaim
                 ? balanceAfter
-                : (startPoints < 0 ? 0 : startPoints);
+                : (progress >= 2220
+                    ? balanceAfter
+                    : (startPoints < 0 ? 0 : startPoints));
 
-            final phase = progress >= 2220
-                ? (progress >= 2720 ? RewardPhase.done : RewardPhase.flash)
-                : RewardPhase.fly;
+            final phase = isMissClaim
+                ? RewardPhase.done
+                : (progress >= 2220
+                    ? (progress >= 2720 ? RewardPhase.done : RewardPhase.flash)
+                    : RewardPhase.fly);
 
             return Positioned(
               right: 16,
@@ -55,41 +62,43 @@ class RewardBadgeOverlay extends StatelessWidget {
         ),
 
         // B. Số cộng bay lên tại khu vực Huy hiệu (Header Plus)
-        AnimatedBuilder(
-          animation: controller,
-          builder: (context, child) {
-            final t = controller.getIntervalValue(
-              2220,
-              420,
-              curve: Curves.easeOut,
-            );
-            final opacity = configs.headerPlusOpacity.transform(t);
-            final yTranslation = configs.headerPlusTranslationY.transform(t);
+        if (!isMissClaim)
+          AnimatedBuilder(
+            animation: controller,
+            builder: (context, child) {
+              final t = controller.getIntervalValue(
+                2220,
+                420,
+                curve: Curves.easeOut,
+              );
+              final opacity = configs.headerPlusOpacity.transform(t);
+              final yTranslation = configs.headerPlusTranslationY.transform(t);
 
-            final progress = controller.value * 3200.0;
-            if (progress < 2220 || progress > 2640) {
-              return const SizedBox.shrink();
-            }
+              final progress = controller.value * 3200.0;
+              if (progress < 2220 || progress > 2640) {
+                return const SizedBox.shrink();
+              }
 
-            return Positioned(
-              left: targetOffset.dx - 36,
-              top: targetOffset.dy + 42 + yTranslation,
-              child: Opacity(
-                opacity: opacity,
-                child: Text(
-                  '+$awardedPoints',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.w900,
+              return Positioned(
+                left: targetOffset.dx - 36,
+                top: targetOffset.dy + 42 + yTranslation,
+                child: Opacity(
+                  opacity: opacity,
+                  child: Text(
+                    '+$awardedPoints',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                      fontWeight: FontWeight.w900,
+                    ),
                   ),
                 ),
-              ),
-            );
-          },
-        ),
+              );
+            },
+          ),
 
         // C. Hiệu ứng nổ tinh thể phát tỏa ra từ tâm Huy hiệu (Header Burst)
+        if (!isMissClaim)
         AnimatedBuilder(
           animation: controller,
           builder: (context, child) {

@@ -17,6 +17,8 @@ class DesignBadge extends StatefulWidget {
 
   /// TextStyle cho giá trị điểm. Nếu null, dùng style mặc định.
   final TextStyle? valueTextStyle;
+  final bool isRewardResult;
+
 
   const DesignBadge({
     required this.value,
@@ -26,6 +28,7 @@ class DesignBadge extends StatefulWidget {
     this.mainColor,
     this.backgroundColor,
     this.valueTextStyle,
+    this.isRewardResult = false,
     super.key,
   });
 
@@ -212,7 +215,9 @@ class _DesignBadgeState extends State<DesignBadge>
                   width: 28,
                   height: 28,
                   child: SvgPicture.asset(
-                    'assets/cat_paws.svg',
+                     widget.isRewardResult
+                                                  ? 'assets/cat_paws_white.svg'
+                                                  : 'assets/cat_paws.svg',
                     package: 'paw_anim',
                     fit: BoxFit.fill,
                   ),

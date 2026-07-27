@@ -1,9 +1,10 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'effects_overlay.dart';
 
 /// [PawSimulatorClaimReward] - Màn hình kết quả trao thưởng chính ở Simulator.
 /// Widget này hiển thị mascot và resultBox được truyền từ app chính.
-class PawSimulatorClaimReward extends StatelessWidget {
+class PawSimulatorClaimReward extends StatefulWidget {
   final int awardedPoints;
   final int finalBalance;
   final Widget mascot;
@@ -11,6 +12,7 @@ class PawSimulatorClaimReward extends StatelessWidget {
   final VoidCallback onClose;
   final Offset? flyTargetOffset;
   final VoidCallback? onAnimationComplete;
+  final bool isMissClaim;
 
   const PawSimulatorClaimReward({
     required this.awardedPoints,
@@ -20,8 +22,44 @@ class PawSimulatorClaimReward extends StatelessWidget {
     required this.onClose,
     this.flyTargetOffset,
     this.onAnimationComplete,
+    this.isMissClaim = false,
     super.key,
   });
+
+  @override
+  State<PawSimulatorClaimReward> createState() =>
+      _PawSimulatorClaimRewardState();
+}
+
+class _PawSimulatorClaimRewardState extends State<PawSimulatorClaimReward> {
+  Timer? _timer;
+  bool _hasClosed = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.isMissClaim) {
+      _timer = Timer(const Duration(milliseconds: 2000), () {
+        if (mounted) {
+          _handleClose();
+        }
+      });
+    }
+  }
+
+  void _handleClose() {
+    if (_hasClosed) return;
+    _hasClosed = true;
+    _timer?.cancel();
+    widget.onAnimationComplete?.call();
+    widget.onClose();
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +81,7 @@ class PawSimulatorClaimReward extends StatelessWidget {
 
               // Tọa độ đích ở góc trên phải
               final targetOffset =
-                  flyTargetOffset ?? Offset(width - 52, 28);
+                  widget.flyTargetOffset ?? Offset(width - 52, 28);
 
               // Tọa độ góc trên bên trái của Mascot (Mascot có kích thước 260x220, ở giữa màn hình)
               final mascotTopLeft = Offset(width / 2 - 130, height / 2 - 166);
@@ -57,30 +95,26 @@ class PawSimulatorClaimReward extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       // Mascot
-                      mascot,
+                      widget.mascot,
                       const SizedBox(height: 12),
                       // Bảng điểm
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          resultBox,
-                        ],
+                        children: [widget.resultBox],
                       ),
                     ],
                   ),
 
                   // Reusable overlay widget for reward animations
-                  SimulatorRewardEffectsOverlay(
-                    awardedPoints: awardedPoints,
-                    balanceAfter: finalBalance,
-                    startOffset: startOffset,
-                    targetOffset: targetOffset,
-                    mascotTopLeft: mascotTopLeft,
-                    onCompleted: () {
-                      onAnimationComplete?.call();
-                      onClose();
-                    },
-                  ),
+                    SimulatorRewardEffectsOverlay(
+                      awardedPoints: widget.awardedPoints,
+                      balanceAfter: widget.finalBalance,
+                      startOffset: startOffset,
+                      targetOffset: targetOffset,
+                      mascotTopLeft: mascotTopLeft,
+                      onCompleted: _handleClose,
+                      isMissClaim: widget.isMissClaim,
+                    ),
                 ],
               );
             },

@@ -19,6 +19,9 @@ class PawSimulatorRewardResultScreen extends StatefulWidget {
   final TextStyle rewardValueStyle;
 
   final VoidCallback? onAnimationComplete;
+  final bool isMissClaim;
+  final bool isRewardResult;
+  final bool isClaimed;
 
   const PawSimulatorRewardResultScreen({
     required this.awardedPoints,
@@ -32,6 +35,9 @@ class PawSimulatorRewardResultScreen extends StatefulWidget {
     required this.statColumn2,
     required this.rewardLabel,
     required this.rewardValueStyle,
+    this.isMissClaim = false,
+    this.isRewardResult = true,
+    this.isClaimed = false,
     this.onAnimationComplete,
     super.key,
   });
@@ -64,6 +70,26 @@ class _PawSimulatorRewardResultScreenState
   }
 
   @override
+  void didUpdateWidget(covariant PawSimulatorRewardResultScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.awardedPoints != widget.awardedPoints ||
+        oldWidget.finalBalance != widget.finalBalance) {
+      controller.dispose();
+      controller = SimulatorRewardController(
+        awardedPoints: widget.awardedPoints,
+        finalBalance: widget.finalBalance,
+        time: 0,
+        vsync: this,
+      );
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          controller.calculateOffsets();
+        }
+      });
+    }
+  }
+
+  @override
   void dispose() {
     controller.dispose();
     super.dispose();
@@ -76,9 +102,7 @@ class _PawSimulatorRewardResultScreenState
         key: controller.rootKey,
         child: Stack(
           children: [
-            Positioned.fill(
-              child: widget.background,
-            ),
+            Positioned.fill(child: widget.background),
             SafeArea(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -99,9 +123,16 @@ class _PawSimulatorRewardResultScreenState
                         ListenableBuilder(
                           listenable: controller,
                           builder: (context, _) => DesignBadge(
+                            isRewardResult: widget.isRewardResult,
                             badgeKey: controller.badgeKey,
-                            value: controller.displayedPoints.toPawFormat(),
-                            phase: controller.rewardPhase,
+                            value:
+                                (widget.isMissClaim
+                                        ? widget.finalBalance
+                                        : controller.displayedPoints)
+                                    .toPawFormat(),
+                            phase: widget.isMissClaim
+                                ? RewardPhase.done
+                                : controller.rewardPhase,
                             type: LoyaltyWidgetType.simulatorExercise,
                           ),
                         ),
@@ -157,54 +188,62 @@ class _PawSimulatorRewardResultScreenState
                                 color: Colors.white.withValues(alpha: 0.2),
                               ),
                               Expanded(child: widget.statColumn2),
-                              Container(
-                                height: 36,
-                                width: 1,
-                                color: Colors.white.withValues(alpha: 0.2),
-                              ),
-                              Expanded(
-                                child: AnimatedBuilder(
-                                  animation: controller.wiggleController,
-                                  builder: (context, child) {
-                                    return Transform(
-                                      alignment: Alignment.center,
-                                      transform: Matrix4.identity()
-                                        ..scale(controller.wiggleScale.value, controller.wiggleScale.value)
-                                        ..rotateZ(
-                                          controller.wiggleRotation.value,
-                                        ),
-                                      child: child,
-                                    );
-                                  },
-                                  child: Column(
-                                    children: [
-                                      widget.rewardLabel,
-                                      const SizedBox(height: 8),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Container(
-                                            key: controller.rewardKey,
-                                            child: SvgPicture.asset(
-                                              'assets/cat_paws.svg',
-                                              package: 'paw_anim',
-                                              width: 24,
-                                              height: 24,
+                              if (!widget.isClaimed) ...[
+                                Container(
+                                  height: 36,
+                                  width: 1,
+                                  color: Colors.white.withValues(alpha: 0.2),
+                                ),
+                                Expanded(
+                                  child: AnimatedBuilder(
+                                    animation: controller.wiggleController,
+                                    builder: (context, child) {
+                                      if (widget.isMissClaim) return child!;
+                                      return Transform(
+                                        alignment: Alignment.center,
+                                        transform: Matrix4.identity()
+                                          ..scale(
+                                            controller.wiggleScale.value,
+                                            controller.wiggleScale.value,
+                                          )
+                                          ..rotateZ(
+                                            controller.wiggleRotation.value,
+                                          ),
+                                        child: child,
+                                      );
+                                    },
+                                    child: Column(
+                                      children: [
+                                        widget.rewardLabel,
+                                        const SizedBox(height: 8),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Container(
+                                              key: controller.rewardKey,
+                                              child: SvgPicture.asset(
+                                                widget.isRewardResult
+                                                    ? 'assets/cat_paws_white.svg'
+                                                    : 'assets/cat_paws.svg',
+                                                package: 'paw_anim',
+                                                width: 24,
+                                                height: 24,
+                                              ),
                                             ),
-                                          ),
-                                          const SizedBox(width: 6),
-                                          Text(
-                                            '${widget.awardedPoints}',
-                                            style: widget.rewardValueStyle,
-                                          ),
-                                        ],
-                                      ),
-                                    ],
+                                            const SizedBox(width: 6),
+                                            Text(
+                                              '${widget.awardedPoints}',
+                                              style: widget.rewardValueStyle,
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
+                              ],
                             ],
                           ),
                         ),
@@ -228,6 +267,7 @@ class _PawSimulatorRewardResultScreenState
                     startOffset: controller.startOffset,
                     targetOffset: controller.targetOffset,
                     mascotTopLeft: controller.mascotTopLeft,
+                    isMissClaim: widget.isMissClaim,
                     showBadgeOverlay: false,
                     onCompleted: () {
                       widget.onAnimationComplete?.call();

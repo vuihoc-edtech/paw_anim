@@ -18,6 +18,7 @@ class SimulatorRewardEffectsOverlay extends StatefulWidget {
   final Offset mascotTopLeft;
   final VoidCallback? onCompleted;
   final bool showBadgeOverlay;
+  final bool isMissClaim;
 
   const SimulatorRewardEffectsOverlay({
     required this.awardedPoints,
@@ -27,6 +28,7 @@ class SimulatorRewardEffectsOverlay extends StatefulWidget {
     required this.mascotTopLeft,
     this.onCompleted,
     this.showBadgeOverlay = true,
+    this.isMissClaim = false,
     super.key,
   });
 
@@ -47,7 +49,9 @@ class _SimulatorRewardEffectsOverlayState
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 3200),
+      duration: widget.isMissClaim
+          ? const Duration(milliseconds: 2000)
+          : const Duration(milliseconds: 3200),
     );
 
     _animationController.addStatusListener((status) {
@@ -82,6 +86,7 @@ class _SimulatorRewardEffectsOverlayState
         ),
 
         // 2. Confetti Overlay
+        
         Positioned.fill(
           child: ConfettiOverlay(
             controller: _animationController,
@@ -92,24 +97,26 @@ class _SimulatorRewardEffectsOverlayState
         ),
 
         // 3. Paw Flights Overlay
-        Positioned.fill(
-          child: PawFlightsOverlay(
-            controller: _animationController,
-            pawFlights: _configs.pawFlights,
-            startOffset: widget.startOffset,
-            targetOffset: widget.targetOffset,
+        if (!widget.isMissClaim)
+          Positioned.fill(
+            child: PawFlightsOverlay(
+              controller: _animationController,
+              pawFlights: _configs.pawFlights,
+              startOffset: widget.startOffset,
+              targetOffset: widget.targetOffset,
+            ),
           ),
-        ),
 
         // 4. Floating Text (Center) Overlay
-        Positioned.fill(
-          child: FloatingTextOverlay(
-            controller: _animationController,
-            configs: _configs,
-            startOffset: widget.startOffset,
-            awardedPoints: widget.awardedPoints,
+        if (!widget.isMissClaim)
+          Positioned.fill(
+            child: FloatingTextOverlay(
+              controller: _animationController,
+              configs: _configs,
+              startOffset: widget.startOffset,
+              awardedPoints: widget.awardedPoints,
+            ),
           ),
-        ),
 
         // 5. Reward Badge & Header Overlay
         if (widget.showBadgeOverlay)
@@ -120,6 +127,7 @@ class _SimulatorRewardEffectsOverlayState
               targetOffset: widget.targetOffset,
               awardedPoints: widget.awardedPoints,
               balanceAfter: widget.balanceAfter,
+              isMissClaim: widget.isMissClaim,
             ),
           ),
       ],
