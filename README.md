@@ -23,6 +23,18 @@ Package cung cấp 3 thành phần giao diện động chính:
 
 ---
 
+## Chạy app example
+
+Thư mục [`example/`](example/) chứa app Flutter chạy thử cả ba màn hình nhận thưởng trên Android, iOS và web.
+
+```sh
+cd example
+flutter pub get
+flutter run
+```
+
+App dùng package local qua `path: ../`. Xem thêm tại [`example/README.md`](example/README.md).
+
 ## 🚀 Hướng dẫn sử dụng
 
 ### 1. Thêm dependency vào dự án chính (`pubspec.yaml`)
@@ -80,6 +92,7 @@ showGeneralDialog(
 ```text
 paw_anim/
 ├── assets/                  # Tài nguyên tĩnh đi kèm (cat_paws.svg)
+├── example/                 # App Flutter chạy thử package
 ├── lib/
 │   ├── paw_anim.dart        # Entry point xuất bản các Widget công khai
 │   └── src/
