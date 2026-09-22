@@ -1,0 +1,19 @@
+name: paw_anim_example
+description: Demo app for the paw_anim package.
+publish_to: none
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.10.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  paw_anim:
+    path: ../
+
+dev_dependencies:
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
