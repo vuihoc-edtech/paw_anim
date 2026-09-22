@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import '../../enums/paw_enums.dart';
-import '../../colors/paw_colors.dart';
+import '../../resource/paw_colors.dart';
 import '../../utils/paw_format.dart';
 import 'paw_reward_controller.dart';
 import 'confetti_painter.dart';

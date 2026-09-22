@@ -4,6 +4,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:paw_anim/src/resource/paw_image.dart';
 import '../../models/paw_flight_data.dart';
 import '../../utils/animation_extension.dart';
 
@@ -170,8 +171,8 @@ class PawFlightsOverlay extends StatelessWidget {
                   child: Transform.rotate(
                     angle: rotation,
                     child: SvgPicture.asset(
-                      'assets/cat_paws.svg',
-                      package: 'paw_anim',
+                      PawImage.catPaws,
+                      package: PawImage.packageImage,
                     ),
                   ),
                 ),

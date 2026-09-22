@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../models/sparkle_data.dart';
 import '../../configs/reward_animation_configs.dart';
-import '../../colors/paw_colors.dart';
+import '../../resource/paw_colors.dart';
 import '../../utils/animation_extension.dart';
 
 /// [SparklesOverlay] - Lớp phủ vẽ các hạt tinh thể lấp lánh xung quanh Mascot.

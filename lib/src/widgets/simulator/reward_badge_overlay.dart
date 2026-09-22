@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../configs/reward_animation_configs.dart';
-import '../../colors/paw_colors.dart';
+import '../../resource/paw_colors.dart';
 import '../../enums/paw_enums.dart';
 import '../../utils/animation_extension.dart';
 import '../../utils/paw_format.dart';

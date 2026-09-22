@@ -225,9 +225,9 @@ class _PawSimulatorRewardResultScreenState
                                               key: controller.rewardKey,
                                               child: SvgPicture.asset(
                                                 widget.isRewardResult
-                                                    ? 'assets/cat_paws_white.svg'
-                                                    : 'assets/cat_paws.svg',
-                                                package: 'paw_anim',
+                                                    ? PawImage.catPawsWhite
+                                                    : PawImage.catPaws,
+                                                package: PawImage.packageImage,
                                                 width: 24,
                                                 height: 24,
                                               ),
