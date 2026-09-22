@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:paw_anim/src/resource/paw_image.dart';
 import '../../enums/paw_enums.dart';
 
 /// Badge hiển thị điểm số trên góc phải, tự động nảy theo mốc thời gian của web
@@ -18,7 +19,6 @@ class DesignBadge extends StatefulWidget {
   /// TextStyle cho giá trị điểm. Nếu null, dùng style mặc định.
   final TextStyle? valueTextStyle;
   final bool isRewardResult;
-
 
   const DesignBadge({
     required this.value,
@@ -215,10 +215,10 @@ class _DesignBadgeState extends State<DesignBadge>
                   width: 28,
                   height: 28,
                   child: SvgPicture.asset(
-                     widget.isRewardResult
-                                                  ? 'assets/cat_paws_white.svg'
-                                                  : 'assets/cat_paws.svg',
-                    package: 'paw_anim',
+                    widget.isRewardResult
+                        ? PawImage.catPawsWhite
+                        : PawImage.catPaws,
+                    package: PawImage.packageImage,
                     fit: BoxFit.fill,
                   ),
                 ),
