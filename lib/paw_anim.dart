@@ -45,3 +45,12 @@ export 'src/widgets/simulator/effects_overlay.dart';
 export 'src/widgets/simulator/simulator_reward_controller.dart';
 export 'src/widgets/simulator/paw_simulator_claim_reward.dart';
 export 'src/widgets/simulator/paw_simulator_reward_result_screen.dart';
+
+// Widgets — Surprise
+export 'src/widgets/surprise/celebration_illustration.dart';
+export 'src/widgets/surprise/celebration_reward_badge.dart';
+export 'src/widgets/surprise/celebration_speech_bubble.dart';
+export 'src/widgets/surprise/celebration_timeline_animations.dart';
+export 'src/widgets/surprise/celebration_title_section.dart';
+export 'src/widgets/surprise/paw_surprise_claim_reward.dart';
+export 'src/widgets/surprise/stroked_celebration_text.dart';
