@@ -19,7 +19,6 @@ class DesignBadge extends StatefulWidget {
   final TextStyle? valueTextStyle;
   final bool isRewardResult;
 
-
   const DesignBadge({
     required this.value,
     required this.phase,
@@ -116,6 +115,8 @@ class _DesignBadgeState extends State<DesignBadge>
       case LoyaltyWidgetType.simulator:
       case LoyaltyWidgetType.common:
         return const Color(0xFFFF6609); // AppColors.subjectDuoMath equivalent
+      case LoyaltyWidgetType.surprise:
+        return const Color(0xFFFF6609);
     }
   }
 
@@ -125,6 +126,8 @@ class _DesignBadgeState extends State<DesignBadge>
         return Colors.transparent;
       case LoyaltyWidgetType.simulator:
       case LoyaltyWidgetType.common:
+        return Colors.white.withValues(alpha: 0.08);
+      case LoyaltyWidgetType.surprise:
         return Colors.white.withValues(alpha: 0.08);
     }
   }
@@ -215,9 +218,9 @@ class _DesignBadgeState extends State<DesignBadge>
                   width: 28,
                   height: 28,
                   child: SvgPicture.asset(
-                     widget.isRewardResult
-                                                  ? 'assets/cat_paws_white.svg'
-                                                  : 'assets/cat_paws.svg',
+                    widget.isRewardResult
+                        ? 'assets/cat_paws_white.svg'
+                        : 'assets/cat_paws.svg',
                     package: 'paw_anim',
                     fit: BoxFit.fill,
                   ),
