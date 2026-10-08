@@ -9,7 +9,8 @@ library;
 export 'src/enums/paw_enums.dart';
 
 // Colors
-export 'src/colors/paw_colors.dart';
+export 'src/resource/paw_colors.dart';
+export 'src/resource/paw_image.dart';
 
 // Utils
 export 'src/utils/paw_format.dart';

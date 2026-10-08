@@ -1,17 +1,14 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:paw_anim/src/resource/paw_image.dart';
 
 /// Widget Chân mèo lớn (BigPaw) ở tâm màn hình nhận thưởng
 class BigPaw extends StatefulWidget {
   final bool isFlying;
   final double size;
 
-  const BigPaw({
-    required this.isFlying,
-    this.size = 160.0,
-    super.key,
-  });
+  const BigPaw({required this.isFlying, this.size = 160.0, super.key});
 
   @override
   State<BigPaw> createState() => _BigPawState();
@@ -162,8 +159,8 @@ class _BigPawState extends State<BigPaw> with TickerProviderStateMixin {
                   width: baseSize,
                   height: baseSize,
                   child: SvgPicture.asset(
-                    'assets/cat_paws.svg',
-                    package: 'paw_anim',
+                    PawImage.catPaws,
+                    package: PawImage.packageImage,
                     fit: BoxFit.fill,
                   ),
                 ),
