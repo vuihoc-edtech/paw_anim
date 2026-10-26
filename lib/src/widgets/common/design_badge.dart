@@ -106,6 +106,8 @@ class _DesignBadgeState extends State<DesignBadge>
       case LoyaltyWidgetType.simulator:
       case LoyaltyWidgetType.common:
         return const Color(0xFFFF6609); // AppColors.subjectDuoMath equivalent
+      case LoyaltyWidgetType.surprise:
+        return const Color(0xFFFF6609);
     }
   }
 
@@ -115,6 +117,8 @@ class _DesignBadgeState extends State<DesignBadge>
         return Colors.transparent;
       case LoyaltyWidgetType.simulator:
       case LoyaltyWidgetType.common:
+        return Colors.white.withValues(alpha: 0.08);
+      case LoyaltyWidgetType.surprise:
         return Colors.white.withValues(alpha: 0.08);
     }
   }
