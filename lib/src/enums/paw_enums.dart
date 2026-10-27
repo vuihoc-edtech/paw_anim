@@ -7,4 +7,4 @@ enum RewardPhase { init, fly, flash, done }
 /// - [simulatorExercise]: Màn hoàn thành bài tập mô phỏng
 /// - [simulator]: Màn hoàn thành câu hỏi trắc nghiệm mô phỏng (Hiển thị cúp)
 /// - [common]: Các màn khác dùng (Celebration Reward)
-enum LoyaltyWidgetType { common, simulator, simulatorExercise }
+enum LoyaltyWidgetType { common, simulator, simulatorExercise, surprise }

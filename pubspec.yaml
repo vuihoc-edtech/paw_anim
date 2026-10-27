@@ -10,6 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_svg:
+  lottie:
 
 dev_dependencies:
   flutter_test:
@@ -20,3 +21,15 @@ flutter:
   assets:
     - assets/cat_paws.svg
     - assets/cat_paws_white.svg
+    - assets/confetti.json
+    - assets/illustration_effects.json
+    - assets/bitu_reward_illustration.png
+    - assets/fonts/SVN-Merge-Regular.otf
+    - assets/fonts/SVN-Merge-Bold.otf
+  fonts:
+    - family: SVN-Merge
+      fonts:
+        - asset: assets/fonts/SVN-Merge-Regular.otf
+          weight: 400
+        - asset: assets/fonts/SVN-Merge-Bold.otf
+          weight: 700
